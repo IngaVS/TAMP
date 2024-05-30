@@ -1,0 +1,21 @@
+<launch>
+
+  <arg name="use_sim" value="false"/>
+  <arg name="odom_topic" value="/ekf_odom"/>
+  <arg name="cmd_topic" value="/diablo_cmd"/>
+  <arg name="traj_topic" value="/minco_traj" />
+
+  <!-- mpc controller -->
+  <rosparam command="load" file="$(find mpc_controller)/params/controller.yaml" />
+  
+  <node pkg="mpc_controller" name="mpc_controller_node" type="mpc_controller_node" output="screen">
+    
+  <!-- <rosparam command="load" file="$(find traj_planner)/config/planning.yaml" /> -->
+    <remap from="cmd" to="$(arg cmd_topic)"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="traj" to="$(arg traj_topic)"/>
+  </node>  
+
+
+
+</launch>

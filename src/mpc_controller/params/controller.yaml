@@ -1,0 +1,86 @@
+# simulator
+# mpc:
+#   du_threshold: 0.001
+#   dt: 0.05
+#   max_iter: 150
+#   predict_steps: 30
+#   delay_num_v: 10
+#   delay_num_w: 1
+#   max_omega: 2.4
+#   max_domega: 3.0
+#   max_speed: 1.5
+#   min_speed: -1.5
+#   max_accel: 0.8
+#   test_mpc: true
+#   matrix_q: [50.0, 50.0, 2.5]
+#   matrix_r: [0.1, 0.1]
+#   matrix_rd: [2.0, 3.0]
+#   # matrix_q: [100.0, 100.0, 0.5]
+#   # matrix_r: [0.01, 0.01]
+#   # matrix_rd: [0.01, 0.01]
+#   model_type: 1 # 0: omnidirectional robots; 1: differential robots; 2: ackermann robots; 
+
+# # real
+# mpc:
+#   du_threshold: 0.001
+#   dt: 0.05
+#   max_iter: 150
+#   # control v
+#   predict_steps: 20
+#   delay_num_v: 10
+#   delay_num_w: 3
+#   max_omega: 2.3
+#   max_domega: 3.0
+#   max_speed: 1.5
+#   min_speed: -1.5
+#   max_accel: 0.8
+#   test_mpc: false
+#   # x, y, yaw
+#   # 1.0m/s
+#   matrix_q: [50.0, 50.0, 0.5]
+#   matrix_r: [0.1, 0.1]
+#   matrix_rd: [2.0, 3.0]
+#   model_type: 1
+
+mpc:
+  du_threshold: 0.01
+  dt: 0.01
+  max_iter: 150
+  # control v
+  predict_steps: 50
+  delay_num_v: 15
+  delay_num_w: 15
+  max_omega: 3.0
+  max_domega: 4.0
+  max_speed: 3.0
+  min_speed: -3.0
+  max_accel: 3.0
+  test_mpc: false
+  # x, y, yaw
+  # 1.0m/s
+  matrix_q: [15.0, 15.0,3.0]
+  matrix_r: [0.1, 0.1]
+  matrix_rd: [5.0, 0.1]
+  model_type: 1
+  # du_threshold: 0.001
+  # dt: 0.02
+  # max_iter: 250
+  # # control v
+  # predict_steps: 50
+  # delay_num_v: 25
+  # delay_num_w: 7
+  # max_omega: 2.3
+  # max_domega: 3.0
+  # max_speed: 1.5
+  # min_speed: -1.5
+  # max_accel: 1.0
+  # test_mpc: true
+  # # x, y, yaw
+  # # 1.0m/s
+  # matrix_q: [20.0, 20.0, 0.5]
+  # matrix_r: [0.01, 0.1]
+  # matrix_rd: [2.0, 2.0]
+  # model_type: 1
+
+
+

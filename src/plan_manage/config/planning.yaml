@@ -1,0 +1,122 @@
+# trajectory Optimizer
+mini_T:                   0.05
+wei_time_:                100.0
+
+kmax:                     3.27 #2.0+0.1 1.5
+kdotmax:                  10000.0
+cons_eps_:                0.1
+yawDotmax:                1.2
+
+
+vmax:                     1.0        # 1.2
+latAccmax:                0.8        # 0.8
+lonAccmax:                0.8        # 0.8
+accRatemax:               0.8        # 0.8
+phimax: 1.1
+omegamax: 3 #0.5-0.02
+pieceTime:                1.0
+
+traj_res:                 8
+past:                     6
+rho:                      1.0
+rho_max:                  1000.0
+gamma:                    1.0
+mem_size:                 256
+g_epsilon:                1.0e-3
+min_step:                 1.0e-32
+delta:                    1.0e-6
+max_iterations:           5000
+amlMaxIter:               500
+
+penaWei:                  1000.0
+esdfWei:                  1000.0
+
+miniS:                    0.1
+# safeMargin:               0.25 #0.15+0.05
+# conpts:                   [[0.15, 0.0], [0.3, -0.00]]
+safeMargin:               0.00 #0.15+0.05
+# conpts:                   [[0.35, 0.3], [0.35, -0.3], [-0.35, -0.3], [-0.35, 0.3]]
+# car: 55 80
+conpts:                   [[0.425, 0.325], [0.425, -0.325], [-0.425, -0.325], [-0.425, 0.325]]
+# conpts:                   [[0.45, 0.325], [0.45, -0.325], [-0.45, -0.325], [-0.45, 0.325]]
+# conpts:                   [[0.475, 0.35], [0.475, -0.35], [-0.475, -0.35], [-0.475, 0.35]]
+# conpts_astar:             [[0.4, 0.275], [0.4, -0.275], [-0.4, -0.275], [-0.4, 0.275]]
+# conpts_astar:             [[0.4, 0.275], [0.4, -0.275], [-0.4, -0.275], [-0.4, 0.275], [0.4, 0.0], [-0.4, 0.0], [0.0, 0.275], [0.0, -0.275]]
+conpts_astar:             [[0.4, 0.275], [0.4, -0.275], [-0.4, -0.275], [-0.4, 0.275], 
+                           [0.4, 0.0],   [-0.4, 0.0],   [ 0.0, -0.275], [ 0.0, 0.275],
+                           [0.2, 0.275], [0.2, -0.275], [-0.2, -0.275], [-0.2, 0.275]]
+
+start_vec:                [0, 0, 0, 0.0]  # px py yaw v
+# end_vec:                  [5.5, 3.0, 1.57, 0.0]
+end_vec:                  [0, 0.0, 0, 0.0]
+
+goal_list:                [0.0, 0.0, 1.57,0,
+                          #  6.5, 1.5, 0.5, 0,
+                           6.5, 1.5, 0.7, 0,
+                           3.0,-3.5, 3.14, 0,
+                           3.0, 3.1, 0.0, 0,
+                           6.2,-2.3, -0.3, 0,
+                           0.0, 0.0, 1.57,0]
+# maze map
+FIRI_bound:               2.5
+# FIRI_bound:               2.0
+plan_mode:                2
+# 0 start to end； 
+# 1 goal from rviz; 
+# 2 start end from rviz;
+# 3 only on start from rviz, 后续都是end
+# 4 debug from Goal list
+# 5 true plan from Goal list without 起点
+OutputPath_posyaw:        "/home/xulong/wxx/posyaw.csv"
+
+front_end_vis:            false
+debug_front_end:          false
+once_vis_one:             false
+once_duration_ms:         -6
+once_optimization:        false
+skip_iter_vis:            200
+skip_iter_duration_ms:    10
+individual_vis:           false
+
+#map
+mapRes:                   0.1
+# mapX:                     35.0
+# mapY:                     8.0
+# maze map
+mapX_range:               [0, 15]
+mapY_range:               [-4, 4]
+# mapX_range:               [-1.5, 7.5]
+# mapY_range:               [-4.0, 4.0]
+expandSize:               0
+wheel_base:               0.6
+horizon_:                 50.0
+#res res res
+yaw_resolution_:          0.785
+steer_res:                0.5
+allocate_num_:            1000000
+# datageneration
+# yaw_resolution_:          0.2
+# steer_res:                0.25
+# allocate_num_:            2000000
+#800000
+#
+# yaw_resolution_:          0.785
+# steer_res:                0.5
+# yaw_resolution_:          1.57
+# steer_res:                0.5
+lambda_heu_:              1.0
+
+
+#0:48134 1:21376 2:19494 3:5794 4:4041 5:3064
+check_num_:               3
+step_arc:                 0.3
+checkl:                   0.1
+
+max_seach_time:           5000.0
+non_siguav:               0.0
+backW:                    2.0
+useDP:                    true
+isdebug:                  false
+isfixGear:                false
+isVis:                    false
+enable_shot:              true

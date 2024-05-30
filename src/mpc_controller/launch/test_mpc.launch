@@ -1,0 +1,32 @@
+<launch>
+
+  <arg name="odom_topic" value="car/odom" />
+  <arg name="traj_topic" value="planner/trajectory" />
+  <arg name="cmd_topic" value="car/command" />
+
+  <rosparam command="load" file="$(find mpc_controller)/params/controller.yaml" />
+
+  <node pkg="mpc_controller" name="mpc_controller_node" type="mpc_controller_node" output="screen">
+    <remap from="cmd" to="$(arg cmd_topic)"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="traj" to="$(arg traj_topic)"/>
+  </node>
+   
+  <!-- <node pkg="kinematics_simulator" type="kinematics_simulator_node" name="kinematics_simulator_node" output="screen" required="true">
+    <remap from ="~cmd" to="$(arg cmd_topic)"/>
+    <remap from="~odom" to="$(arg odom_topic)"/>
+  </node> -->
+
+  <node pkg="kimatic_simulator" name="ugv_kimatic_simulator" type="diablo_kimatic_simulator_node" output="screen">
+    <param name="init_x" value="0.0"/> 
+    <param name="init_y" value="0.0"/>
+    <param name="delay_time_v" value="0.5"/>
+    <param name="delay_time_w" value="0.05"/>
+    <remap from="~command" to="$(arg cmd_topic)"/>
+    <remap from="~odometry" to="$(arg odom_topic)"/>
+  </node>
+
+  <!-- rviz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mpc_controller)/rviz/test.rviz" required="true" />
+
+</launch>

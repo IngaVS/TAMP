@@ -1,0 +1,6 @@
+<launch>
+
+  <!-- rviz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find random_map_generator)/rviz/maze.rviz" required="true" />
+
+</launch>

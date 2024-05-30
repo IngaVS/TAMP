@@ -1,0 +1,108 @@
+<launch>
+
+
+  <node pkg="plan_manage" type="plan_node" name="plan_node_1" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="1" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_2" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="1001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_3" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="2001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_4" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="3001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_5" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="4001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_6" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="5001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_7" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="6001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_8" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="7001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_9" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="8001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_10" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="9001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_11" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="10001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_12" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="11001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_13" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="12001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_14" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="13001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        
+  <node pkg="plan_manage" type="plan_node" name="plan_node_15" output="screen">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <param name="data/mapid" value="14001" type="int"/>
+    <param name="data/pathid" value="1" type="int"/>
+  </node>
+
+        </launch>

@@ -1,0 +1,11 @@
+<launch>
+
+
+    <node pkg="plan_manage" type="plan_node" name="plan_node0" output="screen">
+        <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+        <param name="data/mapid" value="1" type="int"/>
+        <param name="data/pathid" value="1" type="int"/>
+        <remap from="/grid_map_input" to="/global_map_2d"/> 
+    </node>
+
+</launch>

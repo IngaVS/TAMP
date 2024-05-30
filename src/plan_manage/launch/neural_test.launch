@@ -1,0 +1,7 @@
+<launch>
+
+
+  <node pkg="plan_manage" type="neural_test_node" name="neural_test_node" output="screen" >
+  </node>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find plan_manage)/rviz/default.rviz" required="true" />
+</launch>

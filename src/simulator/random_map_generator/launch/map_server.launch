@@ -1,0 +1,23 @@
+<launch>
+
+  <arg name="odom_topic" value="/ekf_odom" />
+  <arg name="cmd_topic" value="/ugv/command" />
+  <arg name="sensor_topic" value="/ugv/laser" />
+  <arg name="mesh_topic" value="/ugv/mesh" />
+  <arg name="map_topic" value="/global_map" />
+  <arg name="map_topic_2d" value="/global_map_2d" />
+
+  <rosparam command="load" file="$(find random_map_generator)/params/map.yaml" />
+
+  <node pkg="random_map_generator" type="random_map" name="random_map" output="screen" required="true">
+    <rosparam file="$(find plan_manage)/config/planning.yaml" command="load" />
+    <remap from ="~odom" to="$(arg odom_topic)"/>
+    <remap from="~local_cloud" to="$(arg sensor_topic)"/>
+    <remap from="~global_cloud" to="$(arg map_topic)"/> 
+    <remap from="~global_cloud_2d" to="$(arg map_topic_2d)"/> 
+  </node>
+
+  <!-- rviz -->
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find random_map_generator)/rviz/default.rviz" required="true" /> -->
+
+</launch>

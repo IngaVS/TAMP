@@ -1,0 +1,9 @@
+<launch>
+
+    <arg name="odom_topic" value="/Odometry_map" />
+
+    <node pkg="kinematics_simulator" type="mesh_vis_for_realworld_node" name="mesh_vis_for_realworld_node" output="screen" required="true">
+      <remap from="~realworld_odom" to="$(arg odom_topic)"/>
+    </node>
+
+</launch>
