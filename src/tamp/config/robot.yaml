@@ -1,0 +1,40 @@
+Velocity:                 50 #m/h
+Move_power:               0.3
+Move_temperature:         10
+Cold_down_temperature:    -30 #origin -10.0
+Cold_down_power:          0.1
+Max_temperature:          55
+#TASK1: get soil
+Get_soil_time:  0.1 # origin: 0.5 = 30min
+Get_soil_power: 0.15 # 
+Get_soil_temperature:   10 # 度/h
+
+#TASK2: fill soil
+Fill_soil_time:  0.083 # 5 minutes
+Fill_soil_power: 0.05 # 
+Fill_soil_temperature:   10 # 度/h
+
+#TASK3: get cup
+Get_cup_time:  0.083 # 单位h, 5 minutes
+Get_cup_power: 0.05 # 
+Get_cup_temperature:   5 # 度/h
+
+#TASK4: fill cup
+Fill_cup_time:  0.083 # 5minutes
+Fill_cup_power: 0.05 # 
+Fill_cup_temperature:   5 # 度/h
+
+#TASK5: get brick
+Get_brick_time:  0.167 # 10minutes
+Get_brick_power: 0.1 # 
+Get_brick_temperature:   8 # 度/h
+
+#TASK6: build brick
+Build_brick_time:  0.1 # origin : 0.5 = 30minutes
+Build_brick_power: 0.15 # 
+Build_brick_temperature:   7 # 度/h
+
+#TASK7: charge
+Charge_power_speed: -4.0 # origin : 0.5 
+
+

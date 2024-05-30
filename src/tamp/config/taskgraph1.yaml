@@ -1,0 +1,107 @@
+TaskGraph1:
+  task_names:
+    - none
+    - get_soil
+    - fill_soil
+    - get_cup
+    - fill_cup
+    - get_brick
+    - build_brick
+    - charge
+
+  #default task
+  none:
+    time:  0.0 # origin : 0.5 = 30minutes
+    power: 0.0 # origin : 0.5 
+    temperature:   0 # 度/h
+    pos: [0, 0]
+    neighbors: 
+      - get_soil
+      - get_cup
+      - get_brick
+      - fill_soil
+      - fill_cup
+      - build_brick
+      - charge
+
+  #TASK1: get soil
+  get_soil:
+    time:  0.1 # origin: 0.5 = 30min
+    power: 0.15 # 
+    temperature:   10 # 度/h
+    pos: [-9, -3]
+    neighbors: 
+      - fill_soil
+      - charge
+
+  #TASK2: fill soil
+  fill_soil:
+    time:  0.083 # 5 minutes
+    power: 0.05 # 
+    temperature:   10 # 度/h
+    pos: [11.5, 0]
+    neighbors: 
+      - get_cup
+      - get_brick
+      - charge
+
+  #TASK3: get cup
+  get_cup:
+    time:  0.083 # 单位h, 5 minutes
+    power: 0.05 # 
+    temperature:   5 # 度/h
+    pos: [10.25, 2.16506]
+    neighbors:
+      - fill_cup
+      - charge
+
+  #TASK4: fill cup
+  fill_cup:
+    time:  0.083 # 5minutes
+    power: 0.05 # 
+    temperature:   5 # 度/h
+    pos: [7.75, 2.16506]
+    neighbors: 
+      - get_soil
+      - get_cup
+      - get_brick
+      - charge
+
+  #TASK5: get brick
+  get_brick:
+    time:  0.167 # 10minutes
+    power: 0.1 # 
+    temperature:   8 # 度/h
+    pos: [6.5, 0.0]
+    neighbors:
+      - build_brick
+      - charge
+
+  #TASK6: build brick
+  build_brick:
+    time:  0.1 # origin : 0.5 = 30minutes
+    power: 0.15 # 
+    temperature:   7 # 度/h
+    pos: [0, 9]
+    neighbors: 
+      - get_soil
+      - get_cup
+      - get_brick
+      - charge
+
+  #TASK7: charge
+  # charge_power_speed: -4.0 # origin : 0.5 
+  charge:
+    time:  0.1 # origin : 0.5 = 30minutes
+    power: -4.0 # origin : 0.5 
+    temperature:   7 # 度/h
+    pos: [7.75, -2.16506]
+    neighbors: 
+      - get_soil
+      - get_cup
+      - get_brick
+      - fill_soil
+      - fill_cup
+      - build_brick
+
+  ###

@@ -1,0 +1,50 @@
+TaskGraph2:
+  task_names:
+    - none
+    - get_brick
+    - build_brick
+    - charge
+
+  #default task
+  none:
+    time:  0.0 # origin : 0.5 = 30minutes
+    power: 0.0 # origin : 0.5 
+    temperature:   0 # 度/h
+    pos: [0, 0]
+    neighbors: 
+      - get_brick
+      - build_brick
+      - charge
+
+  #TASK5: get brick
+  get_brick:
+    time:  0.167 # 10minutes
+    power: 0.1 # 
+    temperature:   8 # 度/h
+    pos: [6.5, 0.0]
+    neighbors:
+      - build_brick
+      - charge
+
+  #TASK6: build brick
+  build_brick:
+    time:  0.1 # origin : 0.5 = 30minutes
+    power: 0.15 # 
+    temperature:   7 # 度/h
+    pos: [0, 9]
+    neighbors: 
+      - get_brick
+      - charge
+
+  #TASK7: charge
+  # charge_power_speed: -4.0 # origin : 0.5 
+  charge:
+    time:  0.1 # origin : 0.5 = 30minutes
+    power: -4.0 # origin : 0.5 
+    temperature:   7 # 度/h
+    pos: [7.75, -2.16506]
+    neighbors: 
+      - get_brick
+      - build_brick
+
+  ###
