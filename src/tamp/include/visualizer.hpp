@@ -43,16 +43,19 @@ public:
 	Eigen::Vector3d ChargePos() const;
 	Eigen::Vector3d SoilRegion() const {return Eigen::Vector3d(soil_pos_x, soil_pos_y, 0.0);};
 	Eigen::Vector3d BuildRegion() const {return Eigen::Vector3d(build_pos_x, build_pos_y, 0.0);};
-	void setPos(Eigen::Vector3d p) {
+	void setRobotNum(int num){
+		robot_num_ = num;
+	}
+	void setPos(const std::vector<Eigen::Vector3d>& p) {
 		robot_pos_ = p;
 	}
-	void setText(std::string s){
+	void setText(const std::vector<std::string>&  s){
 		robot_text_ = s;
 	}
 	void getRobotHead(double h){
 		robot_heading_ = h;
 	}
-	void setTraj(std::vector<Eigen::Vector3d> t){
+	void setTraj(const std::vector<std::vector<Eigen::Vector3d>>& t){
 		traj_ = t;
 	}
 
@@ -70,10 +73,14 @@ private:
   double build_pos_x = 0.0;
   double build_pos_y = 9.0;
   double robot_heading_;
-  Eigen::Vector3d robot_pos_;
-  std::string robot_text_;
+  int robot_num_;
+  std::vector<Eigen::Vector3d> robot_pos_;
+  std::vector<std::string> robot_text_;
+  std::vector<std::vector<Eigen::Vector3d>> traj_;
+  // Eigen::Vector3d robot_pos_;
+  // std::string robot_text_;
   std::vector<Eigen::Vector3d> ZLQ_module_;
-  std::vector<Eigen::Vector3d> traj_;
+  // std::vector<Eigen::Vector3d> traj_;
   bool meterial_;
   bool last_meterial_;
 };

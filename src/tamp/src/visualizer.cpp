@@ -13,7 +13,7 @@ Visualizer::Visualizer(ros::NodeHandle &nh_)
   zlq_pub_ = nh_.advertise<visualization_msgs::MarkerArray>("zlq_model", 10);
   soil_pub_ = nh_.advertise<geometry_msgs::PolygonStamped>("soil", 10);
   build_pub_ = nh_.advertise<geometry_msgs::PolygonStamped>("build", 10);
-  robot_pos_ = Eigen::Vector3d(0.0, -2.0, 0.0);
+  // robot_pos_tmp = Eigen::Vector3d(0.0, -2.0, 0.0);
   meterial_ = false;
   last_meterial_ = false;
   robot_heading_ = 0.0;
@@ -43,99 +43,105 @@ geometry_msgs::Quaternion Visualizer::headingToQuaternion(double heading) {
 }
 void Visualizer::VehiclePub() {
   slt_marker_.markers.clear();
-  ros::Time timestamp = ros::Time::now();
-  visualization_msgs::Marker tmp_marker;
-  tmp_marker.header.frame_id = "odom"; // 设置模型的参考坐标系
-  tmp_marker.type = visualization_msgs::Marker::MESH_RESOURCE;
-  tmp_marker.mesh_resource = "package://tamp/stl/ackermann_model.STL"; // 设置STL模型的文件路径
-  tmp_marker.ns = "slt_model";
-  tmp_marker.id = 1;
-  tmp_marker.pose.position.x = robot_pos_[0]; // 设置模型的初始位置
-  tmp_marker.pose.position.y = robot_pos_[1];
-  tmp_marker.pose.position.z = 0.0;
-  
-  Eigen::Quaterniond quaternion;
-  robot_pos_[2] += M_PI / 2.0;
-  // std::cout<<"yaw "<<robot_pos_[2] * 180 / M_PI<<std::endl;
-  quaternion = Eigen::AngleAxisd(robot_pos_[2], Eigen::Vector3d::UnitZ());
-
-  tmp_marker.pose.orientation.x = quaternion.x(); // 设置模型的初始姿态
-  tmp_marker.pose.orientation.y = quaternion.y();
-  tmp_marker.pose.orientation.z = quaternion.z();
-  tmp_marker.pose.orientation.w = quaternion.w();
-  tmp_marker.scale.x = 0.0002; // 设置模型的尺寸
-  tmp_marker.scale.y = 0.0002;
-  tmp_marker.scale.z = 0.0002;
-  tmp_marker.color.a = 1.0; // 设置模型的透明度
-  tmp_marker.color.r = 1.0; // 设置模型的颜色
-  tmp_marker.color.g = 0.0;
-  tmp_marker.color.b = 0.0;
-  slt_marker_.markers.push_back(tmp_marker);
-
-  // tmp_marker.header.frame_id = "odom"; // 设置模型的参考坐标系
-  tmp_marker.pose.orientation.x = 0.0; // 设置模型的初始姿态
-  tmp_marker.pose.orientation.y = 0.0;
-  tmp_marker.pose.orientation.z = 0.0;
-  tmp_marker.pose.orientation.w = 1.0;
-  tmp_marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
-  tmp_marker.ns = "slt_text";
-  tmp_marker.id = 2;
-  tmp_marker.scale.x = 0.5; // 设置模型的尺寸
-  tmp_marker.scale.y = 0.5;
-  tmp_marker.scale.z = 0.5;
-  tmp_marker.color.a = 1.0; // 设置模型的透明度
-  tmp_marker.color.r = 0.0; // 设置模型的颜色
-  tmp_marker.color.g = 1.0;
-  tmp_marker.color.b = 0.0;
-  tmp_marker.text = robot_text_;
-  slt_marker_.markers.push_back(tmp_marker);
+  for(int i = 0; i < robot_num_; i++){
+    Eigen::Vector3d robot_pos_tmp = robot_pos_[i];
+    std::vector<Eigen::Vector3d> traj_tmp = traj_[i];
 
 
+    ros::Time timestamp = ros::Time::now();
+    visualization_msgs::Marker tmp_marker;
+    tmp_marker.header.frame_id = "odom"; // 设置模型的参考坐标系
+    tmp_marker.type = visualization_msgs::Marker::MESH_RESOURCE;
+    tmp_marker.mesh_resource = "package://tamp/stl/ackermann_model.STL"; // 设置STL模型的文件路径
+    tmp_marker.ns = "slt_model";
+    tmp_marker.id = i*robot_num_ + 1;
+    tmp_marker.pose.position.x = robot_pos_tmp[0]; // 设置模型的初始位置
+    tmp_marker.pose.position.y = robot_pos_tmp[1];
+    tmp_marker.pose.position.z = 0.0;
+    
+    Eigen::Quaterniond quaternion;
+    robot_pos_tmp[2] += M_PI / 2.0;
+    // std::cout<<"yaw "<<robot_pos_tmp[2] * 180 / M_PI<<std::endl;
+    quaternion = Eigen::AngleAxisd(robot_pos_tmp[2], Eigen::Vector3d::UnitZ());
 
-  tmp_marker.pose.orientation.x = 0.0; // 设置模型的初始姿态
-  tmp_marker.pose.orientation.y = 0.0;
-  tmp_marker.pose.orientation.z = 0.0;
-  tmp_marker.pose.orientation.w = 1.0;
-  tmp_marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
-  tmp_marker.ns = "info_text";
-  tmp_marker.id = 4;
-  tmp_marker.scale.x = 1; // 设置模型的尺寸
-  tmp_marker.scale.y = 1;
-  tmp_marker.scale.z = 1;
-  tmp_marker.color.a = 1.0; // 设置模型的透明度
-  tmp_marker.color.r = 0.0; // 设置模型的颜色
-  tmp_marker.color.g = 1.0;
-  tmp_marker.color.b = 0.0;
-  tmp_marker.pose.position.x = soil_pos_x; // 设置模型的初始位置
-  tmp_marker.pose.position.y = soil_pos_y + 10.0;
-  tmp_marker.pose.position.z = 0.0;
-  tmp_marker.text = robot_text_;
-  slt_marker_.markers.push_back(tmp_marker);
-
-  if(!traj_.empty()){
-    tmp_marker.ns = "traj";
-    tmp_marker.type = visualization_msgs::Marker::POINTS;
-    tmp_marker.action = visualization_msgs::Marker::ADD;
+    tmp_marker.pose.orientation.x = quaternion.x(); // 设置模型的初始姿态
+    tmp_marker.pose.orientation.y = quaternion.y();
+    tmp_marker.pose.orientation.z = quaternion.z();
+    tmp_marker.pose.orientation.w = quaternion.w();
+    tmp_marker.scale.x = 0.0002; // 设置模型的尺寸
+    tmp_marker.scale.y = 0.0002;
+    tmp_marker.scale.z = 0.0002;
     tmp_marker.color.a = 1.0; // 设置模型的透明度
     tmp_marker.color.r = 1.0; // 设置模型的颜色
+    tmp_marker.color.g = 0.0;
+    tmp_marker.color.b = 0.0;
+    slt_marker_.markers.push_back(tmp_marker);
+
+    // tmp_marker.header.frame_id = "odom"; // 设置模型的参考坐标系
+    tmp_marker.pose.orientation.x = 0.0; // 设置模型的初始姿态
+    tmp_marker.pose.orientation.y = 0.0;
+    tmp_marker.pose.orientation.z = 0.0;
+    tmp_marker.pose.orientation.w = 1.0;
+    tmp_marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+    tmp_marker.ns = "slt_text";
+    tmp_marker.id = i*robot_num_ + 2;
+    tmp_marker.scale.x = 0.5; // 设置模型的尺寸
+    tmp_marker.scale.y = 0.5;
+    tmp_marker.scale.z = 0.5;
+    tmp_marker.color.a = 1.0; // 设置模型的透明度
+    tmp_marker.color.r = 0.0; // 设置模型的颜色
     tmp_marker.color.g = 1.0;
     tmp_marker.color.b = 0.0;
-    tmp_marker.scale.x = 0.1; // 设置模型的尺寸
-    tmp_marker.scale.y = 0.1;
-    tmp_marker.scale.z = 0.1;
-    tmp_marker.pose.position.x = 0.0; // 设置模型的初始位置
-    tmp_marker.pose.position.y = 0.0;
-    tmp_marker.pose.position.z = 0.0;
-    tmp_marker.id = 3;
-    for(int i = 0; i < traj_.size(); i++){
-      geometry_msgs::Point p;
-      p.x = traj_[i][0]; // 设置模型的初始位置
-      p.y = traj_[i][1];
-      p.z = traj_[i][2];
-      tmp_marker.points.push_back(p);
+    tmp_marker.text = robot_text_[i];
+    slt_marker_.markers.push_back(tmp_marker);
+
+
+
+    // tmp_marker.pose.orientation.x = 0.0; // 设置模型的初始姿态
+    // tmp_marker.pose.orientation.y = 0.0;
+    // tmp_marker.pose.orientation.z = 0.0;
+    // tmp_marker.pose.orientation.w = 1.0;
+    // tmp_marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+    // tmp_marker.ns = "info_text";
+    // tmp_marker.id = i*robot_num_ + 4;
+    // tmp_marker.scale.x = 1; // 设置模型的尺寸
+    // tmp_marker.scale.y = 1;
+    // tmp_marker.scale.z = 1;
+    // tmp_marker.color.a = 1.0; // 设置模型的透明度
+    // tmp_marker.color.r = 0.0; // 设置模型的颜色
+    // tmp_marker.color.g = 1.0;
+    // tmp_marker.color.b = 0.0;
+    // tmp_marker.pose.position.x = soil_pos_x; // 设置模型的初始位置
+    // tmp_marker.pose.position.y = soil_pos_y + 10.0;
+    // tmp_marker.pose.position.z = 0.0;
+    // tmp_marker.text = robot_text_[i];
+    // slt_marker_.markers.push_back(tmp_marker);
+
+    if(!traj_tmp.empty()){
+      tmp_marker.ns = "traj";
+      tmp_marker.type = visualization_msgs::Marker::POINTS;
+      tmp_marker.action = visualization_msgs::Marker::ADD;
+      tmp_marker.color.a = 1.0; // 设置模型的透明度
+      tmp_marker.color.r = 1.0; // 设置模型的颜色
+      tmp_marker.color.g = 1.0;
+      tmp_marker.color.b = 0.0;
+      tmp_marker.scale.x = 0.1; // 设置模型的尺寸
+      tmp_marker.scale.y = 0.1;
+      tmp_marker.scale.z = 0.1;
+      tmp_marker.pose.position.x = 0.0; // 设置模型的初始位置
+      tmp_marker.pose.position.y = 0.0;
+      tmp_marker.pose.position.z = 0.0;
+      tmp_marker.id = i*robot_num_ + 3;
+      for(int i = 0; i < traj_tmp.size(); i++){
+        geometry_msgs::Point p;
+        p.x = traj_tmp[i][0]; // 设置模型的初始位置
+        p.y = traj_tmp[i][1];
+        p.z = traj_tmp[i][2];
+        tmp_marker.points.push_back(p);
+      }
     }
+    slt_marker_.markers.push_back(tmp_marker);
   }
-  slt_marker_.markers.push_back(tmp_marker);
 }
 
 void Visualizer::ZLQPub() {

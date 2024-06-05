@@ -7,11 +7,13 @@ class Trajectory {
 public:
 	Trajectory();
 	Trajectory(const Eigen::Vector3d& sp, const Eigen::Vector3d& ep, const VoxelMap* map_ptr, const double max_vel);
+	Trajectory(const vector<int>& sp, const vector<int>& ep, const VoxelMap* map_ptr, const double max_vel);
 	~Trajectory();
 public:
 	Eigen::Vector3d getPos(const double t) const;
 	double totalTime() const;
 	vector<Eigen::Vector3d> Path() const;
+	bool isValid() {return (path_.size() > 1);}
 
 private:
 	Eigen::Vector3d start_;

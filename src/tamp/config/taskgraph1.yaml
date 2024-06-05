@@ -9,12 +9,22 @@ TaskGraph1:
     - build_brick
     - charge
 
+  preconditions:
+    - robot_has_soil
+    - robot_has_cup
+    - robot_has_brick
+    - path_valid
+    - zlq_out_has_brick
+    - zlq_out_has_cup
+
+
   #default task
   none:
     time:  0.0 # origin : 0.5 = 30minutes
     power: 0.0 # origin : 0.5 
     temperature:   0 # 度/h
     pos: [0, 0]
+    precon: []
     neighbors: 
       - get_soil
       - get_cup
@@ -23,6 +33,7 @@ TaskGraph1:
       - fill_cup
       - build_brick
       - charge
+    
 
   #TASK1: get soil
   get_soil:
@@ -30,9 +41,11 @@ TaskGraph1:
     power: 0.15 # 
     temperature:   10 # 度/h
     pos: [-9, -3]
+    precon: []
     neighbors: 
       - fill_soil
       - charge
+    
 
   #TASK2: fill soil
   fill_soil:
@@ -40,10 +53,14 @@ TaskGraph1:
     power: 0.05 # 
     temperature:   10 # 度/h
     pos: [11.5, 0]
+    precon: 
+      - robot_has_soil #检查机器人是否有土
+      - path_valid
     neighbors: 
       - get_cup
       - get_brick
       - charge
+    
 
   #TASK3: get cup
   get_cup:
@@ -51,9 +68,13 @@ TaskGraph1:
     power: 0.05 # 
     temperature:   5 # 度/h
     pos: [10.25, 2.16506]
+    precon:  
+      - zlq_out_has_cup #检查着陆器是否筛过土
+      - path_valid
     neighbors:
       - fill_cup
       - charge
+    
 
   #TASK4: fill cup
   fill_cup:
@@ -61,11 +82,15 @@ TaskGraph1:
     power: 0.05 # 
     temperature:   5 # 度/h
     pos: [7.75, 2.16506]
+    precon: 
+      - robot_has_cup  #检查机器人是否有杯
+      - path_valid
     neighbors: 
       - get_soil
       - get_cup
       - get_brick
       - charge
+    
 
   #TASK5: get brick
   get_brick:
@@ -73,9 +98,13 @@ TaskGraph1:
     power: 0.1 # 
     temperature:   8 # 度/h
     pos: [6.5, 0.0]
+    precon:  
+      - zlq_out_has_brick #检查着陆器是否制过砖
+      - path_valid
     neighbors:
       - build_brick
       - charge
+    
 
   #TASK6: build brick
   build_brick:
@@ -83,11 +112,15 @@ TaskGraph1:
     power: 0.15 # 
     temperature:   7 # 度/h
     pos: [0, 9]
+    precon:  #检查机器人是否有砖
+      - robot_has_brick
+      - path_valid
     neighbors: 
       - get_soil
       - get_cup
       - get_brick
       - charge
+    
 
   #TASK7: charge
   # charge_power_speed: -4.0 # origin : 0.5 
@@ -96,6 +129,7 @@ TaskGraph1:
     power: -4.0 # origin : 0.5 
     temperature:   7 # 度/h
     pos: [7.75, -2.16506]
+    precon: []
     neighbors: 
       - get_soil
       - get_cup
@@ -103,5 +137,6 @@ TaskGraph1:
       - fill_soil
       - fill_cup
       - build_brick
+    
 
   ###

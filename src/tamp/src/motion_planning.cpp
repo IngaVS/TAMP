@@ -15,6 +15,18 @@ Trajectory::Trajectory(const Eigen::Vector3d& sp, const Eigen::Vector3d& ep, con
     double yaw = crop > 0.0 ? -std::acos(dotp) : std::acos(dotp);
 	Interpolation(astar(map_ptr, Point(sp[0],sp[1], yaw), Point(ep[0],ep[1], yaw)));
 }
+Trajectory::Trajectory(const vector<int>& sp, const vector<int>& ep, const VoxelMap* map_ptr, const double max_vel) {
+	start_ = Eigen::Vector3d(sp[0], sp[1], 0.0);
+	goal_ = Eigen::Vector3d(ep[0], ep[1], 0.0);
+	speed_ = max_vel;
+	path_.clear();
+	Eigen::Vector3d ori = Eigen::Vector3d(ep[0], ep[1], 0.0) - Eigen::Vector3d(sp[0], sp[1], 0.0);
+    Eigen::Vector3d axis_x(1,0,0);
+    double dotp =  ori.dot(axis_x) / ori.norm();
+    auto crop =  (ori[0] * axis_x[1] - ori[1] * axis_x[0]);
+    double yaw = crop > 0.0 ? -std::acos(dotp) : std::acos(dotp);
+	Interpolation(astar(map_ptr, Point(sp[0],sp[1], yaw), Point(ep[0],ep[1], yaw)));
+}
 
 void Trajectory::Interpolation(const std::vector<Node>& path){
 	if(path.size() < 2) return;

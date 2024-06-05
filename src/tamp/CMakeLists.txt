@@ -23,7 +23,7 @@ include_directories(
 )
 
 catkin_package()
-add_executable(task_motion_planning src/task_motion_planning.cpp src/task_planning.cpp src/visualizer.cpp src/motion_planning.cpp)
+add_executable(task_motion_planning src/task_motion_planning.cpp  src/visualizer.cpp src/motion_planning.cpp src/robot_task.cpp)
 
 target_link_libraries(task_motion_planning
   ${OMPL_LIBRARIES}

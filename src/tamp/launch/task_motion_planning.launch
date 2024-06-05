@@ -19,6 +19,9 @@
   </node>
   <node pkg="tamp" type="task_motion_planning" name="task_motion_planning_node" output="screen">
   <rosparam file="$(find tamp)/config/robot.yaml" command="load" />
+  <rosparam file="$(find tamp)/config/taskgraph1.yaml" command="load" />
+  <rosparam file="$(find tamp)/config/taskgraph2.yaml" command="load" />
+  <rosparam file="$(find tamp)/config/ZLQTask.yaml" command="load" />
   </node>
 
 </launch>

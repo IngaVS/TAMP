@@ -1,40 +1,34 @@
-Velocity:                 50 #m/h
-Move_power:               0.3
-Move_temperature:         10
-Cold_down_temperature:    -30 #origin -10.0
-Cold_down_power:          0.1
-Max_temperature:          55
-#TASK1: get soil
-Get_soil_time:  0.1 # origin: 0.5 = 30min
-Get_soil_power: 0.15 # 
-Get_soil_temperature:   10 # 度/h
+RobotTypes: 
+  - robot_type1
+  - robot_type2
+  - ZLQ
 
-#TASK2: fill soil
-Fill_soil_time:  0.083 # 5 minutes
-Fill_soil_power: 0.05 # 
-Fill_soil_temperature:   10 # 度/h
+robot_type1:
+  robot_num: 1
+  velocity: 50 # m/h
+  move_power: 0.3
+  move_temperature: 10
+  cold_down_temperature: -30 # origin -10.0
+  cold_down_power: 0.1
+  max_temperature: 55
+  task_file: TaskGraph1
 
-#TASK3: get cup
-Get_cup_time:  0.083 # 单位h, 5 minutes
-Get_cup_power: 0.05 # 
-Get_cup_temperature:   5 # 度/h
+robot_type2:
+  robot_num: 1
+  velocity: 20 # m/h
+  move_power: 0.3
+  move_temperature: 10
+  cold_down_temperature: -30 # origin -10.0
+  cold_down_power: 0.1
+  max_temperature: 55
+  task_file: TaskGraph2
 
-#TASK4: fill cup
-Fill_cup_time:  0.083 # 5minutes
-Fill_cup_power: 0.05 # 
-Fill_cup_temperature:   5 # 度/h
-
-#TASK5: get brick
-Get_brick_time:  0.167 # 10minutes
-Get_brick_power: 0.1 # 
-Get_brick_temperature:   8 # 度/h
-
-#TASK6: build brick
-Build_brick_time:  0.1 # origin : 0.5 = 30minutes
-Build_brick_power: 0.15 # 
-Build_brick_temperature:   7 # 度/h
-
-#TASK7: charge
-Charge_power_speed: -4.0 # origin : 0.5 
-
-
+ZLQ:
+  robot_num: 0
+  velocity: 0 # m/h
+  move_power: 0.0
+  move_temperature: 0.0
+  cold_down_temperature: -30 # origin -10.0
+  cold_down_power: 0.1
+  max_temperature: 80
+  task_file: ZLQTask

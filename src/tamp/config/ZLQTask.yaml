@@ -1,0 +1,48 @@
+ZLQTask:
+  task_names:
+    - none
+    - sieving_soil
+    - generate_brick
+    - charge
+    #default task
+  preconditions:
+    - zlq_in_has_soil
+    - zlq_in_has_cup
+
+  none:
+    time:  0.0 # origin : 0.5 = 30minutes
+    power: 0.0 # origin : 0.5 
+    temperature:   0 # 度/h
+    pos: [0, 0]
+    precon: []
+    neighbors: 
+      - none
+
+  sieving_soil:
+    time:  0.167 # 10minutes
+    power: 0.05 # 5%/h
+    temperature:   0 # 度/h
+    pos: [0, 0]
+    precon:   
+      - zlq_in_has_soil #检查着陆器是否有土
+    neighbors: 
+      - none
+
+  generate_brick:
+    time:  3 # 3h
+    power: 0.2 # 20%/h
+    temperature:   10 # 度/h
+    pos: [0, 0]
+    precon:   
+      - zlq_in_has_cup #检查着陆器是否有筛后的土
+    neighbors: 
+      - none
+
+  charge:
+    time:  0.0 # origin : 0.5 = 30minutes
+    power: -4 # origin : 0.5 
+    temperature:   0 # 度/h
+    pos: [0, 0]
+    precon: []
+    neighbors: 
+      - none

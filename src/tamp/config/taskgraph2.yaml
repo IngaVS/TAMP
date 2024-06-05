@@ -11,10 +11,12 @@ TaskGraph2:
     power: 0.0 # origin : 0.5 
     temperature:   0 # 度/h
     pos: [0, 0]
+    precon: []
     neighbors: 
       - get_brick
       - build_brick
       - charge
+    
 
   #TASK5: get brick
   get_brick:
@@ -22,9 +24,11 @@ TaskGraph2:
     power: 0.1 # 
     temperature:   8 # 度/h
     pos: [6.5, 0.0]
+    precon: []
     neighbors:
-      - build_brick
+      - generate_brick
       - charge
+    
 
   #TASK6: build brick
   build_brick:
@@ -32,9 +36,11 @@ TaskGraph2:
     power: 0.15 # 
     temperature:   7 # 度/h
     pos: [0, 9]
+    precon: []
     neighbors: 
       - get_brick
       - charge
+    
 
   #TASK7: charge
   # charge_power_speed: -4.0 # origin : 0.5 
@@ -43,8 +49,10 @@ TaskGraph2:
     power: -4.0 # origin : 0.5 
     temperature:   7 # 度/h
     pos: [7.75, -2.16506]
+    precon: []
     neighbors: 
       - get_brick
       - build_brick
+    
 
   ###

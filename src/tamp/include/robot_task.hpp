@@ -1,140 +1,34 @@
 #pragma once
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
-#include <vector>
-#include <string>
-#include <unordered_map>
 #include <map>
-#include <unordered_set>
-#include "task_info.hpp"
+#include "motion_planning.hpp"
+#include "config.hpp"
+#include "data_pool.hpp"
 using namespace std;
 
-// 定义一个结构体来存储机器人类型的信息
-struct Robot {
-    int TypeId;
-    int Robot_num;
-    double Velocity;
-    double Move_power;
-    double Move_temperature;
-    double Cold_down_temperature;
-    double Cold_down_power;
-    double Max_temperature;
-    std::string task_file;
-};
-
-struct TaskConfig {
-    std::string name;
-    double time;
-    double power;
-    double temperature;
-    std::vector<int> pos;
-    std::vector<std::string> neighbors;
-};
-class Config {
-public:
-	Config(){};
-    Config(const ros::NodeHandle &nh_priv) {
-        
-    	// 获取机器人类型的数量
-	    int robot_types;
-	    std::string robot_types_param = "/RobotTypes";
-	    if (nh.getParam(robot_types_param, robot_types)) {
-	        ROS_INFO("Successfully retrieved parameter: %s", robot_types_param.c_str());
-	        ROS_INFO("RobotTypes: %d", robot_types);
-	    } else {
-	        ROS_ERROR("111 Failed to get param '%s'", robot_types_param.c_str());
-	        return 1;
-	    }
-
-	    // 获取机器人参数
-	    std::vector<Robot> robots;
-	    for (int i = 0; i < robot_types; ++i) {
-	        Robot robot;
-	        std::string robot_base = "/Robots/" + std::to_string(i);
-
-	        if (!nh.getParam(robot_base + "/TypeId", robot.TypeId) ||
-	            !nh.getParam(robot_base + "/Robot_num", robot.Robot_num) ||
-	            !nh.getParam(robot_base + "/Velocity", robot.Velocity) ||
-	            !nh.getParam(robot_base + "/Move_power", robot.Move_power) ||
-	            !nh.getParam(robot_base + "/Move_temperature", robot.Move_temperature) ||
-	            !nh.getParam(robot_base + "/Cold_down_temperature", robot.Cold_down_temperature) ||
-	            !nh.getParam(robot_base + "/Cold_down_power", robot.Cold_down_power) ||
-	            !nh.getParam(robot_base + "/Max_temperature", robot.Max_temperature) ||
-	            !nh.getParam(robot_base + "/task_file", robot.task_file)) {
-	            ROS_ERROR("Failed to get some params for robot %d", i);
-	            continue;
-	        }
-
-	        robots.push_back(robot);
-	    }
-
-
-
-
-
-
-        // 获取全局参数
-        std::cout<<"11111111"<<std::endl;
-        nh_priv.getParam("Velocity", velocity);
-        nh_priv.getParam("Move_power", move_power);
-        nh_priv.getParam("Move_temperature", move_temperature);
-        nh_priv.getParam("Cold_down_temperature", cold_down_temperature);
-        nh_priv.getParam("Cold_down_power", cold_down_power);
-        nh_priv.getParam("Max_temperature", max_temperature);
-        // 获取任务列表
-        if (nh_priv.getParam("Tasks", task_names)) {
-            for (const std::string& task_name : task_names) {
-                TaskConfig task;
-                task.name = task_name;
-                std::cout<<"taskname "<<task_name<<std::endl;
-                // 从私有命名空间获取任务参数
-                nh_priv.getParam(task_name + "/time", task.time);
-                nh_priv.getParam(task_name + "/power", task.power);
-                nh_priv.getParam(task_name + "/temperature", task.temperature);
-                nh_priv.getParam(task_name + "/pos", task.pos);
-                nh_priv.getParam(task_name + "/neighbors", task.neighbors);
-                task_params.insert(make_pair(task_name, task));
-            }
-        } else {
-            ROS_ERROR("Failed to get param 'Tasks'");
-        }
-    }
-    double velocity;
-    double move_power;
-    double move_temperature;
-    double cold_down_temperature;
-    double cold_down_power;
-    double max_temperature;
-    std::vector<std::string> task_names;
-    std::unordered_map<std::string, TaskConfig> task_params;
-};
-struct ZLQStatus{
-	int cup_num;
-	int brick_num;
-	int build_num;
-};
 struct TaskNode{
-	std::unordered_map<std::string, TaskConfig>::const_iterator task_ptr;
-	//get result after motion planning
-	std::map<double, TaskNode*> neighbors;
+	std::string task_name;
+	std::multimap<double, std::shared_ptr<TaskNode>> neighbors;
 	std::unordered_set<string> expanded_name;
-	// RobotState end_state;
-	// TaskProcess task_process;
-	// Trajectory charge_traj;
-
-	// string name;
-	TaskNode* parent;
+	std::shared_ptr<TaskNode> parent;
 	double g;
 	double h;
 
-	TaskNode(std::unordered_map<std::string, TaskConfig>::const_iterator itr){
-		// name = nm;
-		task_ptr = itr;
+	//get result after motion planning
+	RobotState end_state;
+	TaskProcess task_process;
+	Trajectory charge_traj;
+
+	TaskNode(const string name){
+		task_name = name;
 		parent = nullptr;
 		expanded_name.clear();
 		neighbors.clear();
 		g = 0.0;
 		h = 0.0;
+		end_state = RobotState(0.0, 1.0, 15);
+		task_process = TaskProcess();
 	}
 	// 计算节点的 f 值（f = g + h）
     double f() const {
@@ -142,27 +36,56 @@ struct TaskNode{
     }
 };
 
-// // 自定义优先队列的比较函数
-// struct CompareNode {
-//     bool operator()(const RobotTask* n1, const RobotTask* n2) const {
-//         return n1->f() > n2->f();
-//     }
-// };
-
-
 class RobotTask {
 public:
 	RobotTask();
 	RobotTask(ros::NodeHandle &nh);
 	~RobotTask();
 	void Run();
-	void Init(const Config& config);
+	void Init(const TaskGraph& config, const Robot& robot);
+	void GetInfo();
+	void SetStartTime(const double st){start_time_ = st;};
+	void SetMap(const VoxelMap* vm){voxel_map_ = vm;}
+	string getText() const {return robot_text_;}
+	Eigen::Vector3d getPos()const {return pos_;}
+	vector<Eigen::Vector3d> getTraj()const {return traj_;}
+	bool getMeterial() const {return vis_meterial_;}
+
 private:
 	double g_func(const TaskConfig& st, const TaskConfig& et);
 	double h_func(const TaskConfig& et);
-	ros::NodeHandle nh_;
-	Config config_;
-	vector<TaskNode> task_seq_;
-	TaskNode* cur_node_;
+	void FindPubTask(double t);
+	bool PreconValid(const vector<string>& precons, 
+							const vector<int>& sp,
+							const vector<int>& ep,
+							const RobotState& cur_state);
 
+	bool UpdateTask(const RobotState& begin_task_state, 
+					const TaskConfig& cur_task_param,
+					const TaskConfig& next_task_param, 
+					std::shared_ptr<TaskNode> next_node);
+	void UpdateState(const TaskConfig& next_task_param, std::shared_ptr<TaskNode> next_node);
+
+	RobotState CalculateState(const Trajectory& traj, const RobotState& begin_state, 
+														vector<RobotState>& robot_state_vec);
+	RobotState CalculateOperationalState(const  TaskConfig& next_task_param, const RobotState& begin_state, 
+												vector<RobotState>& robot_state_vec);
+
+	ros::NodeHandle nh_;
+	TaskGraph config_;
+	Robot robot_;
+	DataPool* data_pool_;
+	vector<TaskNode> task_vec_;
+	double start_time_;
+	std::shared_ptr<TaskNode> cur_node_;
+	int cycle_;
+	
+	const VoxelMap* voxel_map_;
+
+	size_t find_task_idx_;
+	Eigen::Vector3d pos_;
+	string robot_text_;
+	bool vis_meterial_;
+	vector<Eigen::Vector3d> traj_;
+	ros::Publisher pub_;
 };
